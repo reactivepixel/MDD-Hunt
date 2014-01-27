@@ -17,7 +17,9 @@ That goes here =]
 ## Installation
 
 Run bowser and Grunt installs from terminal.
+
     bower install
+
     grunt install
 
 ======
@@ -25,4 +27,5 @@ Run bowser and Grunt installs from terminal.
 ## Run
 
 To run the app
+
     grunt serve
