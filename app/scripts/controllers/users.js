@@ -1,5 +1,4 @@
 'use strict';
-
 /*global Firebase */
 
 angular.module('gravityApp')
@@ -14,12 +13,15 @@ angular.module('gravityApp')
 
 		$scope.facebookLogin = function(){
 			$scope.auth.$login('facebook', {
-				scope: 'email,user_likes'
+				scope: 'email,user_photos,rsvp_event,create_event'
 			})
 
 			// If login success
 			.then(function(user){
 				$scope.user = user;
+				$scope.user.picture = 'https://graph.facebook.com/' + user.id + '/picture';
+				$scope.addUser(user);
+				console.log('AuthData', $scope.auth);
 
 			//if login error
 			}, function(error){
@@ -29,13 +31,13 @@ angular.module('gravityApp')
 		$scope.facebookLogout = function(){
 			$scope.auth.$logout();
 		};
-		$scope.addUser = function(){
+		$scope.addUser = function(fbUser){
 
 			// if first user in system
 			if( $scope.info.users === undefined ){
 				$scope.info.users = [];
 			}
 
-			$scope.info.users[1001] = {fbid:1001, name:'Chris'};
+			$scope.info.users[fbUser.id] = fbUser;
 		};
 	});

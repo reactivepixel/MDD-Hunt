@@ -77,3 +77,8 @@ body {
     border-bottom: 0;
   }
 }
+
+
+.userThumb{
+  border-radius: 50%;
+}
