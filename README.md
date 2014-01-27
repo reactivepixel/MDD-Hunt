@@ -19,7 +19,6 @@ That goes here =]
 Run bowser and Grunt installs from terminal.
 
     bower install
-
     grunt install
 
 ======
