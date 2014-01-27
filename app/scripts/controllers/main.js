@@ -1,6 +1,6 @@
 'use strict';
 
-angular.module('tradeWindsApp')
+angular.module('gravityApp')
   .controller('MainCtrl', function ($scope) {
     $scope.awesomeThings = [
       'HTML5 Boilerplate',

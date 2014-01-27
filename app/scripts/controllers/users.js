@@ -2,7 +2,7 @@
 
 /*global Firebase */
 
-angular.module('tradeWindsApp')
+angular.module('gravityApp')
 	.controller('CtrlUser', function ($scope, FireBind, $firebaseSimpleLogin) {
 		// Instantiate Simple Login with Firebase ref
 		var dataRef = new Firebase('https://gravityapp.firebaseio.com');

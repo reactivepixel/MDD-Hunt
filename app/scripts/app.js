@@ -1,6 +1,6 @@
 'use strict';
 
-angular.module('tradeWindsApp', [
+angular.module('gravityApp', [
   'ngCookies',
   'ngResource',
   'ngSanitize',
