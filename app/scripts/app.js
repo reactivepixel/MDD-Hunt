@@ -4,7 +4,8 @@ angular.module('tradeWindsApp', [
   'ngCookies',
   'ngResource',
   'ngSanitize',
-  'ngRoute'
+  'ngRoute',
+  'firebase'
 ])
   .config(function ($routeProvider) {
     $routeProvider
