@@ -2,7 +2,7 @@
 /*global Firebase */
 
 angular.module('gravityApp')
-	.controller('CtrlUser', function ($scope, FireBind, $firebaseSimpleLogin) {
+	.controller('CtrlUser', function ($scope, FireBind, $firebaseSimpleLogin, $http) {
 		// Instantiate Simple Login with Firebase ref
 		var dataRef = new Firebase('https://gravityapp.firebaseio.com');
 		$scope.auth = $firebaseSimpleLogin(dataRef);
@@ -27,6 +27,19 @@ angular.module('gravityApp')
 			}, function(error){
 				console.log('Error Logging in:', error);
 			});
+		};
+		$scope.attendFacebookEvent = function(args){
+			var str = 'https://graph.facebook.com/' + args.eventID + '/attending/' + '?callback=JSON_CALLBACK&access_token=' + args.accessToken;
+			
+			$http({method: 'post', url: str})
+				.success(function(data, status) {
+					console.log('success', data, status);
+				})
+				.error(function(data, status) {
+					console.log('error', data, status);
+				});
+
+
 		};
 		$scope.facebookLogout = function(){
 			$scope.auth.$logout();
