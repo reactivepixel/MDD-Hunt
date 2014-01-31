@@ -1,5 +1,5 @@
 {
-  "name": "Gravity",
+  "name": "gravity",
   "version": "0.0.0",
   "dependencies": {
     "angular": "~1.2.10",
@@ -10,7 +10,8 @@
     "angular-route": "1.2.6",
     "firebase": "~1.0.2",
     "angularfire": "~0.6.0",
-    "firebase-simple-login": "~1.2.3"
+    "firebase-simple-login": "~1.2.3",
+    "observe-js": "~0.1.4"
   },
   "devDependencies": {
     "angular-mocks": "1.2.6",
