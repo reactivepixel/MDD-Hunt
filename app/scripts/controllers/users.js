@@ -2,7 +2,7 @@
 /*global Firebase */
 
 angular.module('gravityApp')
-	.controller('CtrlUser', function ($scope, FireBind, $firebaseSimpleLogin, $http) {
+	.controller('CtrlUser', function ($scope, FireBind, $firebaseSimpleLogin, $http, $timeout) {
 		// Instantiate Simple Login with Firebase ref
 		var dataRef = new Firebase('https://gravityapp.firebaseio.com');
 		$scope.auth = $firebaseSimpleLogin(dataRef);
@@ -20,6 +20,19 @@ angular.module('gravityApp')
 			console.log($scope.newEvent);
 		};
 
+		//beaconing
+		$scope.activateBeacon = function(){
+			$scope.info.githubUsers[$scope.user.id].beaconStatus = true;
+			//console.log(hit);
+
+			// setTimeout(function() {
+			// 	$scope.info.githubUsers[$scope.user.id].beaconStatus = false;
+			// }, 3);
+			$timeout(function() {
+				$scope.info.githubUsers[$scope.user.id].beaconStatus = false;
+			}, 3000);
+		};
+
 		//Github Simple Auth
 		$scope.githubLogin = function(){
 			$scope.auth.$login('github', {
@@ -28,7 +41,10 @@ angular.module('gravityApp')
 
 			// If login success
 			.then(function(user){
-				$scope.githubUser = user;
+				//add ons
+				user.beaconStatus = false;
+
+				$scope.user = user;
 				//$scope.user.picture = 'https://graph.facebook.com/' + user.id + '/picture';
 				$scope.addGithubUser(user);
 				//console.log('AuthData', $scope.auth);
@@ -88,9 +104,7 @@ angular.module('gravityApp')
 				$scope.info.githubUsers = [];
 			}
 
-			
-
+			// Add the user to Firebase
 			$scope.info.githubUsers[user.id] = user;
-			console.log('---', $scope.info.githubUsers);
 		};
 	});

@@ -8,10 +8,16 @@
 	<img class="userThumb" src="{{user.picture}}">
 	{{user.displayName}}
 </div>
+<ul class="list-group">
+	<li class="list-group-item list-group-item-warning" ng-repeat="activeUser in info.githubUsers">
+		<img src="http://gravatar.com/avatar/{{activeUser.gravatar_id}}" />
+		<button class="btn btn-danger" ng-class="{btnsuccess: activeUser.beaconStatus === true }">Status: {{activeUser.beaconStatus}}</button>
+	</li>
+</ul>
 
+<button ng-click="activateBeacon()">Activate</button>
 
-
-
+<!-- 
 <form ng-submit="createEvent()" role="form">
 	<div class="form-group">
 		<label>Event Name
@@ -41,3 +47,4 @@
 </form>
 
 
+ -->
