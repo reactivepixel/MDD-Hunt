@@ -90,17 +90,17 @@ body {
 }
 
 
-.btnsuccess{
-  color: #ffffff;
-  background-color: #5cb85c;
-  border-color: #4cae4c;
-}
+
 .btndanger {
   color: #ffffff;
   background-color: #d9534f;
   border-color: #d43f3a;
 }
-
+.btnsuccess{
+  color: #ffffff;
+  background-color: #5cb85c;
+  border-color: #4cae4c;
+}
 .well img{
   height: 44px;
 }

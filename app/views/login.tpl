@@ -11,7 +11,7 @@
 	</div>
 
 		<div ng-repeat="activeUser in info.githubUsers">
-			<div class="well well-sm btndanger col-md-3" ng-class="{btnsuccess: activeUser.beaconStatus === true }">
+			<div class="well well-sm col-md-3" ng-class="{btnsuccess: activeUser.beaconStatus === true, btndanger: activeUser.beaconStatus === false }">
 				<img src="http://gravatar.com/avatar/{{activeUser.gravatar_id}}" />
 			</div>
 			
