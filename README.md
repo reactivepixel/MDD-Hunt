@@ -18,8 +18,9 @@ That goes here =]
 
 Run bowser and Grunt installs from terminal.
 
+    npm install -g grunt-cli bower
+    npm install
     bower install
-    grunt install
 
 ======
 
