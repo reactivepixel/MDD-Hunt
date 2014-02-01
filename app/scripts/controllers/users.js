@@ -6,7 +6,6 @@ angular.module('gravityApp')
 		// Instantiate Simple Login with Firebase ref
 		var dataRef = new Firebase('https://gravityapp.firebaseio.com');
 		$scope.auth = $firebaseSimpleLogin(dataRef);
-
 		// 3Way Bind it!
 		FireBind.$bind($scope, 'info');
 		
@@ -19,11 +18,23 @@ angular.module('gravityApp')
 			//$scope.info.events[$scope.newEvent.id] = $scope.newEvent;
 			console.log($scope.newEvent);
 		};
-
+		$scope.beaconExtinguish = function(){
+			console.log('Show Coods');
+		};
 		//beaconing
 		$scope.activateBeacon = function(){
 			$scope.info.githubUsers[$scope.user.id].beaconStatus = true;
-			//console.log(hit);
+			var falseBeacons = 0;
+			for(var index in $scope.info.githubUsers){
+				if(!$scope.info.githubUsers[index].beaconStatus){
+					falseBeacons++;
+				}
+			}
+
+			console.log('beacons', falseBeacons);
+			if(falseBeacons === 0 ){
+				$scope.beaconExtinguish();
+			}
 
 			// setTimeout(function() {
 			// 	$scope.info.githubUsers[$scope.user.id].beaconStatus = false;
