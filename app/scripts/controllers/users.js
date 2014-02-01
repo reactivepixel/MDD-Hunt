@@ -1,13 +1,15 @@
 'use strict';
-/*global Firebase */
 
 angular.module('gravityApp')
-	.controller('CtrlUser', function ($scope, FireBind, $firebaseSimpleLogin, $http, $timeout) {
-		// Instantiate Simple Login with Firebase ref
-		var dataRef = new Firebase('https://gravityapp.firebaseio.com');
-		$scope.auth = $firebaseSimpleLogin(dataRef);
+	.controller('CtrlUser', function ($scope, FireBind, $firebaseSimpleLogin, $http, $timeout,FireLog,$rootScope) {
+	
 		// 3Way Bind it!
 		FireBind.$bind($scope, 'info');
+
+		$rootScope.$on('$firebaseSimpleLogin:login', function(){
+			$scope.processUserLogin({ user : FireLog.user });
+		});
+		
 		
 		$scope.createEvent = function(){
 			if(!$scope.info.events){
@@ -19,7 +21,7 @@ angular.module('gravityApp')
 			console.log($scope.newEvent);
 		};
 		$scope.beaconExtinguish = function(){
-			console.log('Show Coods');
+			$scope.info.lockbox.lockedStatus = false;
 		};
 		//beaconing
 		$scope.activateBeacon = function(){
@@ -31,34 +33,43 @@ angular.module('gravityApp')
 				}
 			}
 
-			console.log('beacons', falseBeacons);
 			if(falseBeacons === 0 ){
 				$scope.beaconExtinguish();
 			}
 
-			// setTimeout(function() {
-			// 	$scope.info.githubUsers[$scope.user.id].beaconStatus = false;
-			// }, 3);
+			// needed incase the user logsout while timeout is in progress
+			var targetUserID = $scope.user.id;
+
 			$timeout(function() {
-				$scope.info.githubUsers[$scope.user.id].beaconStatus = false;
+				$scope.info.githubUsers[targetUserID].beaconStatus = false;
 			}, 3000);
 		};
+		$scope.processUserLogin = function(args){
+			if(args.user.provider === 'github'){
 
+				args.user.beaconStatus = false;
+
+				$scope.user = args.user;
+				
+			} else if(args.user.provider === 'facebook'){
+				$scope.user = args.user;
+				$scope.user.picture = 'https://graph.facebook.com/' + args.user.id + '/picture';
+				$scope.addUser(args.user);
+			}
+		};
 		//Github Simple Auth
 		$scope.githubLogin = function(){
-			$scope.auth.$login('github', {
+			FireLog.$login('github', {
 				scope: 'user,repo'
 			})
 
 			// If login success
 			.then(function(user){
-				//add ons
-				user.beaconStatus = false;
-
-				$scope.user = user;
-				//$scope.user.picture = 'https://graph.facebook.com/' + user.id + '/picture';
+				// Add user to list of active users
 				$scope.addGithubUser(user);
-				//console.log('AuthData', $scope.auth);
+
+				// Process Login
+				$scope.processUserLogin({ user : user });
 
 			//if login error
 			}, function(error){
@@ -66,16 +77,14 @@ angular.module('gravityApp')
 			});
 		};
 		$scope.facebookLogin = function(){
-			$scope.auth.$login('facebook', {
+			FireLog.$login('facebook', {
 				scope: 'email,user_photos,rsvp_event,create_event'
 			})
 
 			// If login success
 			.then(function(user){
-				$scope.user = user;
-				$scope.user.picture = 'https://graph.facebook.com/' + user.id + '/picture';
-				$scope.addUser(user);
-				console.log('AuthData', $scope.auth);
+
+				$scope.processUserLogin({ user : user });
 
 			//if login error
 			}, function(error){
@@ -96,7 +105,8 @@ angular.module('gravityApp')
 
 		};
 		$scope.facebookLogout = function(){
-			$scope.auth.$logout();
+			FireLog.$logout();
+			delete $scope.user;
 		};
 		$scope.addUser = function(fbUser){
 
@@ -117,5 +127,11 @@ angular.module('gravityApp')
 
 			// Add the user to Firebase
 			$scope.info.githubUsers[user.id] = user;
+		};
+		$scope.forceUnlock = function(){
+			$scope.info.lockbox.lockedStatus = false;
+		};
+		$scope.forceLock = function(){
+			$scope.info.lockbox.lockedStatus = true;
 		};
 	});

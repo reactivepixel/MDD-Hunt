@@ -1,29 +1,31 @@
 <div class="col-md-12 btn-group">
-	<button ng-click="facebookLogin()" type="button" class="btn btn-info btn-active active">Login with Facebook</button>
-	<button ng-click="githubLogin()" type="button" class="btn btn-info">Github</button>
+	<button ng-hide="user" ng-click="facebookLogin()" type="button" class="btn btn-info btn-active active">Login with Facebook</button>
+	<button ng-hide="user" ng-click="githubLogin()" type="button" class="btn btn-info">Github</button>
 	<button ng-click="facebookLogout()" type="button" class="btn btn-default">Log Out</button>
-	<button ng-click="attendFacebookEvent({eventID:'651165088259218', accessToken:user.accessToken})" type="button" class="btn btn-default">attend Event</button>
+	<!-- <button ng-click="attendFacebookEvent({eventID:'651165088259218', accessToken:user.accessToken})" type="button" class="btn btn-default">attend Event</button> -->
+	<button ng-show="user" class="btn btn-info" ng-click="activateBeacon()">Activate</button>
 </div>
-<div class="col-md-12">
+<div ng-show="info.lockbox.lockedStatus" class="col-md-12">
 	<div ng-show="user.picture">
 		<img class="userThumb" src="{{user.picture}}">
 		{{user.displayName}}
 	</div>
 
-		<div ng-repeat="activeUser in info.githubUsers">
-			<div class="well well-sm col-md-3" ng-class="{btnsuccess: activeUser.beaconStatus === true, btndanger: activeUser.beaconStatus === false }">
-				<img src="http://gravatar.com/avatar/{{activeUser.gravatar_id}}" />
-			</div>
-			
-			
+	<div ng-repeat="activeUser in info.githubUsers">
+		<div class="well well-sm col-md-1" ng-class="{btnsuccess: activeUser.beaconStatus === true, btndanger: activeUser.beaconStatus === false }">
+			<img src="http://gravatar.com/avatar/{{activeUser.gravatar_id}}" />
 		</div>
-</div>
-	<div class="col-md-12">
-		<button class="btn btn-info" ng-click="activateBeacon()">Activate</button>
 	</div>
 </div>
 
+<div ng-hide="info.lockbox.lockedStatus" class="col-md-12">
+	<p class="well">
+		{{info.lockbox.url}}
+	</p>
+</div>
 
+<button ng-click="forceUnlock()">Unlock</button>
+<button ng-click="forceLock()">Lock</button>
 <!-- 
 <form ng-submit="createEvent()" role="form">
 	<div class="form-group">
