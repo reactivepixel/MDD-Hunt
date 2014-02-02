@@ -12,7 +12,7 @@
 	</div>
 
 	<div ng-repeat="activeUser in info.githubUsers">
-		<div class="well well-sm col-md-1" ng-class="{btnsuccess: activeUser.beaconStatus === true, btndanger: activeUser.beaconStatus === false }">
+		<div class="well well-sm" ng-class="{btnsuccess: activeUser.beaconStatus === true, btndanger: activeUser.beaconStatus === false }">
 			<img src="http://gravatar.com/avatar/{{activeUser.gravatar_id}}" />
 		</div>
 	</div>
@@ -26,6 +26,7 @@
 
 <button ng-click="forceUnlock()">Unlock</button>
 <button ng-click="forceLock()">Lock</button>
+<button ng-click="proximityCheck()">Proximity</button>
 <!-- 
 <form ng-submit="createEvent()" role="form">
 	<div class="form-group">

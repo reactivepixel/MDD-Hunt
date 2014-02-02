@@ -23,9 +23,12 @@ angular.module('gravityApp')
 		$scope.beaconExtinguish = function(){
 			$scope.info.lockbox.lockedStatus = false;
 		};
+		
 		//beaconing
 		$scope.activateBeacon = function(){
 			$scope.info.githubUsers[$scope.user.id].beaconStatus = true;
+
+
 			var falseBeacons = 0;
 			for(var index in $scope.info.githubUsers){
 				if(!$scope.info.githubUsers[index].beaconStatus){
@@ -43,7 +46,83 @@ angular.module('gravityApp')
 			$timeout(function() {
 				$scope.info.githubUsers[targetUserID].beaconStatus = false;
 			}, 3000);
+
+
+
+			// Geoloc
+			$scope.findLoc({userID : targetUserID});
+
+			// Check all distances
+			$scope.proximityCheck();
+
+
 		};
+		$scope.findLoc = function(args){
+			console.log('setup');
+			if (navigator.geolocation) {
+				$scope.GeoLoc = navigator.geolocation.watchPosition(function(data){
+					
+					$scope.info.githubUsers[ args.userID ].geoLoc = data;
+					console.log('setting data', $scope.info.githubUsers[ args.userID ], data);
+
+
+				}, function(error){
+					console.log('error', error);
+				});
+			} else {
+				console.log('not supported');
+			}
+		}
+
+		$scope.proximityCheck = function(){
+			var threshHold = .01,
+				failureStatus = false;;
+
+			for(var index in $scope.info.githubUsers){
+				for(var innerIndex in $scope.info.githubUsers){
+					var userA = $scope.info.githubUsers[ index ],
+						userB = $scope.info.githubUsers[ innerIndex ],
+						distance = $scope.distance( userA.geoLoc.coords.longitude, userA.geoLoc.coords.latitude, userB.geoLoc.coords.longitude, userB.geoLoc.coords.latitude );
+						console.log('diff',distance);
+					if(distance <= threshHold) {
+						failureStatus = true;
+						
+					}
+				}
+			}
+
+			console.log('failureStatus',failureStatus);
+			if(!failureStatus){
+				$scope.forceUnlock();
+			}
+			return failureStatus;
+		};
+
+		$scope.distance = function (lon1, lat1, lon2, lat2) {
+
+
+
+			/** Converts numeric degrees to radians */
+			if (typeof(Number.prototype.toRad) === 'undefined') {
+				Number.prototype.toRad = function() {
+					return this * Math.PI / 180;
+				};
+			}
+
+
+
+			var R = 6371; // Radius of the earth in km
+			var dLat = (lat2-lat1).toRad();  // Javascript functions in radians
+			var dLon = (lon2-lon1).toRad();
+			var a = Math.sin(dLat/2) * Math.sin(dLat/2) + Math.cos(lat1.toRad()) * Math.cos(lat2.toRad()) * Math.sin(dLon/2) * Math.sin(dLon/2);
+			var c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1-a));
+			var d = R * c; // Distance in km
+			return d;
+		};
+
+			
+
+
 		$scope.processUserLogin = function(args){
 			if(args.user.provider === 'github'){
 
