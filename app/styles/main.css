@@ -106,10 +106,10 @@ body {
   margin-bottom: 3px;
 
   position: relative;
-  top: -5px;
-  -moz-box-shadow:    3px 3px 5px 6px #666;
-  -webkit-box-shadow: 3px 3px 5px 6px #666;
-  box-shadow:         3px 3px 5px 6px #666;
+  top: -3px;
+  -moz-box-shadow:    2px 2px 2px 2px #666;
+  -webkit-box-shadow: 2px 2px 2px 2px #666;
+  box-shadow:         2px 2px 2px 2px #666;
 }
 .well img{
   height: 44px;
