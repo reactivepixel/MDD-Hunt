@@ -94,12 +94,16 @@ body {
 .btndanger {
   color: #ffffff;
   background-color: #d9534f;
-  border-color: #d43f3a;
+  border: #d43f3a .25em solid;
+  border-radius:100%;
+  margin-bottom: 3px;
 }
 .btnsuccess{
   color: #ffffff;
   background-color: #5cb85c;
-  border-color: #4cae4c;
+  border: #4cae4c .25em solid;
+  border-radius:100%;
+  margin-bottom: 3px;
 }
 .well img{
   height: 44px;

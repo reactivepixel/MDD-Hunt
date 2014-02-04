@@ -3,6 +3,8 @@
 angular.module('gravityApp')
 	.controller('CtrlUser', function ($scope, FireBind, $firebaseSimpleLogin, $http, $timeout,FireLog,$rootScope) {
 	
+		$scope.instructions = 'Logging into Github is required to continue down this rabbit hole.';
+
 		// 3Way Bind it!
 		FireBind.$bind($scope, 'info');
 
@@ -21,7 +23,7 @@ angular.module('gravityApp')
 			console.log($scope.newEvent);
 		};
 		$scope.beaconExtinguish = function(){
-			$scope.info.lockbox.lockedStatus = false;
+			$scope.forceUnlock();
 		};
 		
 		//beaconing
@@ -29,15 +31,11 @@ angular.module('gravityApp')
 			$scope.info.githubUsers[$scope.user.id].beaconStatus = true;
 
 
-			var falseBeacons = 0;
+			$scope.falseBeacons = 0;
 			for(var index in $scope.info.githubUsers){
 				if(!$scope.info.githubUsers[index].beaconStatus){
-					falseBeacons++;
+					$scope.falseBeacons++;
 				}
-			}
-
-			if(falseBeacons === 0 ){
-				$scope.beaconExtinguish();
 			}
 
 			// needed incase the user logsout while timeout is in progress
@@ -52,52 +50,65 @@ angular.module('gravityApp')
 			// Geoloc
 			$scope.findLoc({userID : targetUserID});
 
-			// Check all distances
-			$scope.proximityCheck();
 
 
 		};
 		$scope.findLoc = function(args){
 			console.log('setup');
 			if (navigator.geolocation) {
-				$scope.GeoLoc = navigator.geolocation.watchPosition(function(data){
+				$scope.GeoLoc = navigator.geolocation.getCurrentPosition(function(data){
 					
 					$scope.info.githubUsers[ args.userID ].geoLoc = data;
-					console.log('setting data', $scope.info.githubUsers[ args.userID ], data);
-
+					console.log('setting data', data);
+					
+					if($scope.falseBeacons === 0 ){
+						// Check all distances
+						$scope.proximityCheck();
+					}
 
 				}, function(error){
+					$scope.error = 'Geolocation Failure. Make certain you this service is not disabled within your settings. Please refresh your browser.';
 					console.log('error', error);
 				});
 			} else {
 				console.log('not supported');
+				$scope.error = 'Geolocation Failure';
 			}
-		}
+		};
 
 		$scope.proximityCheck = function(){
-			var threshHold = .01,
-				failureStatus = false;;
+			var threshHold = 0.01;
+			$scope.proxFailure = false;
 
 			for(var index in $scope.info.githubUsers){
+				var userA = $scope.info.githubUsers[ index ];
+				if(!userA.geoLoc){
+					$scope.proxFailure = true;
+					break;
+				}
 				for(var innerIndex in $scope.info.githubUsers){
-					var userA = $scope.info.githubUsers[ index ],
-						userB = $scope.info.githubUsers[ innerIndex ],
-						distance = $scope.distance( userA.geoLoc.coords.longitude, userA.geoLoc.coords.latitude, userB.geoLoc.coords.longitude, userB.geoLoc.coords.latitude );
-						console.log('diff',distance);
-					if(distance <= threshHold) {
-						failureStatus = true;
+					
+					var userB = $scope.info.githubUsers[ innerIndex ];
+
+
+					var distance = $scope.distance( userA.geoLoc.coords.longitude, userA.geoLoc.coords.latitude, userB.geoLoc.coords.longitude, userB.geoLoc.coords.latitude );
+					console.log('diff',distance);
+					if(distance <= threshHold && distance !== 0) {
 						
+						$scope.proxFail();
 					}
 				}
 			}
 
-			console.log('failureStatus',failureStatus);
-			if(!failureStatus){
+			console.log('$scope.proxFailure',$scope.proxFailure, (!$scope.proxFailure));
+			if(!$scope.proxFailure){
 				$scope.forceUnlock();
 			}
-			return failureStatus;
+			return $scope.proxFailure;
 		};
-
+		$scope.proxFail = function(){
+			$scope.proxFailure = true;
+		};
 		$scope.distance = function (lon1, lat1, lon2, lat2) {
 
 
@@ -129,6 +140,10 @@ angular.module('gravityApp')
 				args.user.beaconStatus = false;
 
 				$scope.user = args.user;
+
+				//establish Loc
+				$scope.findLoc({ userID: $scope.user.id });
+				$scope.instructions = 'Complex interfaces without instructions can be annoying. Try and lead your users with affordiances... visual clues.';
 				
 			} else if(args.user.provider === 'facebook'){
 				$scope.user = args.user;
@@ -185,6 +200,7 @@ angular.module('gravityApp')
 		};
 		$scope.facebookLogout = function(){
 			FireLog.$logout();
+			delete $scope.info.githubUsers[$scope.user.id];
 			delete $scope.user;
 		};
 		$scope.addUser = function(fbUser){
