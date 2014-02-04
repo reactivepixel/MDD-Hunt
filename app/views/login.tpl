@@ -18,7 +18,7 @@
 <div ng-show="info.lockbox.lockedStatus" class="col-sm-6">
 
 	<div class="well-sm alert alert-warning" ng-show="proxFailure">
-		<p><strong>Proximity Threshold Failure:</strong> Good work getting all users activating simaltaniously; each needs to be more than 10 meters away from each other.</p>
+		<p><strong>Proximity Threshold Failure:</strong> Each user needs to be more than 10 meters away from each other for successful activation.</p>
 	</div>
 
 	<p class="well">

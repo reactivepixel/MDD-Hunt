@@ -43,7 +43,7 @@ angular.module('gravityApp')
 
 			$timeout(function() {
 				$scope.info.githubUsers[targetUserID].beaconStatus = false;
-			}, 3000);
+			}, 10000);
 
 
 
