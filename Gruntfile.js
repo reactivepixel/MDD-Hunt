@@ -33,6 +33,7 @@ module.exports = function (grunt) {
           commit: true,
           push: true,
           connectCommits: false,
+          message: 'Check *this* out.' + pkg.version,
           tag: pkg.version
         }
       },

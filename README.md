@@ -37,7 +37,3 @@ To run the app
 Deploying this package requires [Grunt Build Control](https://github.com/robwierzbowski/grunt-build-control)
 
     npm install grunt-build-control --save-dev
-
-After the plugin has been installed, load it in your Gruntfile with:
-
-    grunt.loadNpmTasks('grunt-build-control');
