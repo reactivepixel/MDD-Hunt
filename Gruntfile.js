@@ -29,10 +29,9 @@ module.exports = function (grunt) {
       testbranch: {
         options: {
           branch: 'staging',
-          remote: '../',
+          remote: 'git@github.com:reactivepixel/Gravity.git',
           commit: true,
           push: true,
-          remote: 'git@github.com:reactivepixel/Gravity.git',
           connectCommits: false,
           tag: pkg.version
         }
