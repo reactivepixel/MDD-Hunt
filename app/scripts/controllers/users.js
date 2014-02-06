@@ -58,6 +58,7 @@ angular.module('gravityApp')
 			if (navigator.geolocation) {
 				$scope.GeoLoc = navigator.geolocation.getCurrentPosition(function(data){
 					
+					console.log('args.userID',args.userID);
 					$scope.info.githubUsers[ args.userID ].geoLoc = data;
 					console.log('setting data', data);
 					

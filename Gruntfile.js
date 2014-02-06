@@ -9,6 +9,8 @@
 
 module.exports = function (grunt) {
 
+  var pkg = require('./package.json');
+
   // Load grunt tasks automatically
   require('load-grunt-tasks')(grunt);
 
@@ -17,6 +19,34 @@ module.exports = function (grunt) {
 
   // Define the configuration for all the tasks
   grunt.initConfig({
+
+  
+    // Configuration to be run (and then tested).
+    buildcontrol: {
+      options: {
+        dir: 'dist',
+      },
+      testbranch: {
+        options: {
+          branch: 'test-branch',
+          remote: '../',
+          commit: true,
+          push: true,
+          connectCommits: false,
+          tag: pkg.version
+        }
+      },
+      production: {
+        options: {
+          branch: 'prod',
+          remote: 'git@github.com:reactivepixel/Gravity.git',
+          commit: true,
+          message: 'Check *this* out.',
+          push: true
+        }
+      }
+    },
+
 
     // Project settings
     yeoman: {
@@ -350,9 +380,18 @@ module.exports = function (grunt) {
     'concurrent:test',
     'autoprefixer',
     'connect:test',
-    'karma'
+    'karma',
+    'buildcontrol'
   ]);
 
+
+
+
+  // These plugins provide necessary tasks.
+  grunt.loadNpmTasks('grunt-contrib-jshint');
+  grunt.loadNpmTasks('grunt-contrib-clean');
+  grunt.loadNpmTasks('grunt-contrib-nodeunit');
+  
   grunt.registerTask('build', [
     'clean:dist',
     'bower-install',
