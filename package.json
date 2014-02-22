@@ -1,7 +1,9 @@
 {
   "name": "gravity",
   "version": "0.0.0",
-  "dependencies": {},
+  "dependencies": {
+    "grunt-contrib-nodeunit": "~0.3.2"
+  },
   "devDependencies": {
     "grunt": "~0.4.1",
     "grunt-autoprefixer": "~0.4.0",

@@ -10,14 +10,3 @@ angular.module('gravityApp')
 		var ref = new Firebase('https://gravityapp.firebaseio.com');
 		return $firebaseSimpleLogin( ref );
 	});
-	// .factory('GeoLoc', function($rootScope) {
-	// 	if (navigator.geolocation) {
-	// 		navigator.geolocation.watchPosition(function(data){
-	// 			console.log(data);
-	// 		}, function(error){
-
-	// 		});
-	// 	} else {
-	// 		console.log('not supported');
-	// 	}
-	// });
