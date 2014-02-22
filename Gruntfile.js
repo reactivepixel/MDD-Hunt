@@ -26,9 +26,21 @@ module.exports = function(grunt) {
 			options: {
 				dir: 'dist',
 			},
-			deploy: {
+
+			stage: {
 				options: {
 					branch: 'staging',
+					remote: 'git@github.com:reactivepixel/Gravity.git',
+					commit: true,
+					push: true,
+					connectCommits: false,
+					message: 'Check *this* out.' + pkg.version,
+					tag: pkg.version
+				}
+			},
+			deploy: {
+				options: {
+					branch: 'gh-pages',
 					remote: 'git@github.com:reactivepixel/Gravity.git',
 					commit: true,
 					push: true,
